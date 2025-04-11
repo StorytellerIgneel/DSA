@@ -8,5 +8,7 @@ public class App {
     public static void main(String[] args) {
         String filePath = "C:\\Users\\Teoh Wei Hong\\Documents\\Programming\\Own study\\DSA\\DSA\\app\\src\\main\\java\\dsa\\airplane_cargo.xlsx";
         ExcelReader.ReadFromExcel(filePath);
+
+        
     }
 }

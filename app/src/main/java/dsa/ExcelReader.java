@@ -3,23 +3,21 @@ package dsa;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
-import java.util.PriorityQueue;
+import java.util.*;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelReader {
-    public static PriorityQueue<Cargo> ReadFromExcel(String filepath){
-        PriorityQueue<Cargo> queue = new PriorityQueue<>();
+    public static Map<Cargo, Integer> ReadFromExcel(String filepath){
+        Map<Cargo, Integer> cargoMap = new HashMap<>(); //for the DS
+        //lets say we have 10 books, it would then look like this: (book, 10)
+        //the key is the book, and the value is the quantity of the book
 
         try{
             FileInputStream file = new FileInputStream(new File(filepath));
             Workbook workbook = new XSSFWorkbook(file);
-
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
 
@@ -41,18 +39,15 @@ public class ExcelReader {
                 int space = (int)Double.parseDouble(spaceCell.toString());
                 int quantity = (int) Double.parseDouble(quantityCell.toString());
 
-                for (int i = 0; i < quantity; i++){
-                    Cargo newCargo = new Cargo(name, space);
-                    System.out.println(newCargo.getName());
-                    System.out.println(newCargo.getSpace());
-                    //add inside DS
-                }
-                workbook.close();
-                file.close();
+                Cargo newCargo = new Cargo(name, space);
+                cargoMap.put(newCargo, quantity); //put the cargo into the map with its quantity
+                //quantity is added directly as we have conformation that the records are unique
             }
+            workbook.close();
+            file.close();
         }catch(IOException e){
             e.printStackTrace();
         }
-        return queue;
+        return cargoMap;
     }
 }
