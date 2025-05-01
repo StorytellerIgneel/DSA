@@ -10,7 +10,7 @@ public class BestFitDecreasing {
     public BestFitDecreasing() {
         this.completedAirplanes = new ArrayList<Airplane>(); //initialize the completed airplanes list
         this.availableAirplane = new Airplane();
-        this.cargoTreeMap = transformToTreeMap(ExcelReader.ReadFromExcel("C:\\Users\\Teoh Wei Hong\\Documents\\Programming\\Own study\\DSA\\DSA\\app\\src\\main\\java\\dsa\\airplane_cargo.xlsx")); //read the cargoes from the excel file
+        this.cargoTreeMap = transformToTreeMap(ExcelReader.ReadFromExcel("src\\main\\java\\dsa\\airplane_cargo.xlsx")); //read the cargoes from the excel file
     }
 
     public ArrayList<Airplane> getCompletedAirplanes() {
@@ -38,9 +38,9 @@ public class BestFitDecreasing {
         Airplane airplane = new Airplane();
     
         Cargo currentCargo = initialCargo;
-        while (currentCargo != null && remainingSpace >= currentCargo.getSpace()) {
+        while (currentCargo != null && remainingSpace >= currentCargo.getSize()) {
             airplane.addCargo(currentCargo);
-            remainingSpace -= currentCargo.getSpace();
+            remainingSpace -= currentCargo.getSize();
             // System.out.println("current cargo: " + currentCargo.getName());
             // System.out.println("remaining space: "+ remainingSpace);
             removeCargoFromMap(currentCargo);
@@ -59,7 +59,7 @@ public class BestFitDecreasing {
     //remove the cargo from the treemap
     //removes the entire key if the list is empty
     private void removeCargoFromMap(Cargo cargo) {
-        int space = cargo.getSpace();
+        int space = cargo.getSize();
         List<CargoWrapper> list = cargoTreeMap.get(space);
     
         if (list == null || list.isEmpty()) return;
@@ -92,12 +92,12 @@ public class BestFitDecreasing {
             int quantity = entry.getValue(); //get the quantity
             CargoWrapper cargoWrapper = new CargoWrapper(cargo, quantity); //create a new cargo wrapper
 
-            if (cargoTreeMap.containsKey(cargo.getSpace())) { //if the tree map already contains the space of the cargo
-                cargoTreeMap.get(cargo.getSpace()).add(cargoWrapper); //add the cargo wrapper to the list of that space
+            if (cargoTreeMap.containsKey(cargo.getSize())) { //if the tree map already contains the space of the cargo
+                cargoTreeMap.get(cargo.getSize()).add(cargoWrapper); //add the cargo wrapper to the list of that space
             } else {
                 List<CargoWrapper> cargoList = new ArrayList<>(); //create a new list of cargo wrappers
                 cargoList.add(cargoWrapper); //add the cargo wrapper to the list
-                cargoTreeMap.put(cargo.getSpace(), cargoList); //put the list into the tree map with the space as key
+                cargoTreeMap.put(cargo.getSize(), cargoList); //put the list into the tree map with the space as key
             }
         }
         return cargoTreeMap; //return the tree map

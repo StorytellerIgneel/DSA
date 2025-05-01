@@ -77,7 +77,7 @@ public class ExcelReader {
                 rowNum++;
                 // 
                 row.createCell(1).setCellValue(cargo.getName());
-                row.createCell(2).setCellValue(cargo.getSpace());
+                row.createCell(2).setCellValue(cargo.getSize());
                 row.createCell(3).setCellValue(airplane.getStorageSpace()); // same remaining space repeated
             }
 

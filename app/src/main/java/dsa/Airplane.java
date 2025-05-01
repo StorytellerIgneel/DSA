@@ -41,7 +41,7 @@ public class Airplane {
 
     public void addCargo(Cargo cargo) {
         cargoList.add(cargo); //add the cargo to the list
-        this.storageSpace -= cargo.getSpace(); //decrease the storage space by the cargo space
+        this.storageSpace -= cargo.getSize(); //decrease the storage space by the cargo space
     }
 
     @Override
@@ -52,7 +52,7 @@ public class Airplane {
         sb.append("  Loaded Cargoes: \n");
 
         for (Cargo cargo : this.getCargoList()) {
-            sb.append("    - Cargo(space=").append(cargo.getSpace()).append(", id=")
+            sb.append("    - Cargo(size=").append(cargo.getSize()).append(", id=")
             .append(cargo.getName()).append(")\n"); // assuming `id` or similar exists
         }
 
