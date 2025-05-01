@@ -2,11 +2,12 @@ package dsa;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.*;
 
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelReader {
@@ -49,5 +50,62 @@ public class ExcelReader {
             e.printStackTrace();
         }
         return cargoMap;
+    }
+
+    public static void exportToExcel(String filepath, List <Airplane> completedAirplanes){
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("BFD solution");
+
+        //header row
+        Row headerRow = sheet.createRow(0);
+        String[] headerStrings = {"Airplane ID", "Cargo Name", "Cargo Space", "Remaining Space"};
+        for (int i = 0; i < headerStrings.length; i++){
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headerStrings[i]);
+        }
+
+        //start to fill in the rows here
+        int rowNum = 1;
+        
+        int airplaneNum = 1;
+
+        for (Airplane airplane : completedAirplanes){
+            int startRow = rowNum;
+
+            for (Cargo cargo : airplane.getCargoList()){
+                Row row = sheet.createRow(rowNum);
+                rowNum++;
+                // 
+                row.createCell(1).setCellValue(cargo.getName());
+                row.createCell(2).setCellValue(cargo.getSpace());
+                row.createCell(3).setCellValue(airplane.getStorageSpace()); // same remaining space repeated
+            }
+
+            if (startRow != rowNum-1){
+                sheet.addMergedRegion(new CellRangeAddress(startRow, rowNum-1, 0, 0));
+            }
+            Row firstRow = sheet.getRow(startRow);
+            firstRow.createCell(0).setCellValue("Plane #" + airplaneNum);
+            airplaneNum ++;
+        }
+
+        // Autosize columns
+        for (int i = 0; i < headerStrings.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        //write to file
+        try (FileOutputStream fileOut = new FileOutputStream(filepath)){
+            workbook.write(fileOut);
+            System.out.println("Report now available in current dir with name: " + filepath);
+        }catch(IOException E){
+            E.printStackTrace();
+        }finally{
+            try {
+                workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

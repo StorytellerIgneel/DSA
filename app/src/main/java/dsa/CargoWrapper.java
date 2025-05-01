@@ -15,6 +15,12 @@ public class CargoWrapper {
         return quantity;
     }
 
+    public void decrement() {
+        if (quantity > 0) {
+            quantity--;
+        }
+    }
+
     @Override
     public String toString() {
         return "CargoWrapper{" +

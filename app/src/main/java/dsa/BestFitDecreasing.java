@@ -1,9 +1,89 @@
 package dsa;
 
 import java.util.*;
-import dsa.ExcelReader;
 
 public class BestFitDecreasing {
+    private ArrayList<Airplane> completedAirplanes; //list of airplanes in the airport
+    private Airplane availableAirplane; //list of available airplanes in the airport
+    private TreeMap<Integer, List<CargoWrapper>> cargoTreeMap;
+
+    public BestFitDecreasing() {
+        this.completedAirplanes = new ArrayList<Airplane>(); //initialize the completed airplanes list
+        this.availableAirplane = new Airplane();
+        this.cargoTreeMap = transformToTreeMap(ExcelReader.ReadFromExcel("C:\\Users\\Teoh Wei Hong\\Documents\\Programming\\Own study\\DSA\\DSA\\app\\src\\main\\java\\dsa\\airplane_cargo.xlsx")); //read the cargoes from the excel file
+    }
+
+    public ArrayList<Airplane> getCompletedAirplanes() {
+        return completedAirplanes; //return the completed airplanes list
+    }
+    
+    public Airplane getAvailableAirplane() {
+        return availableAirplane; //return the available airplanes list
+    }
+
+    public TreeMap<Integer, List<CargoWrapper>> getCargoTreeMap() {
+        return cargoTreeMap;
+    }
+
+    //create new airplane(bin) and put it into the available airplanes list of the available space
+    public void shipAirplane(){
+        completedAirplanes.add(availableAirplane); //add the airplane to the completed airplanes list
+        this.availableAirplane = new Airplane(); //create a new airplane
+    }
+
+    //main logic
+    //runs similar to recursive, add cargo -> search for cargo with less remaining space -> until no more cargo that fits
+    public void loadCargo(Cargo initialCargo) {
+        int remainingSpace = 10;
+        Airplane airplane = new Airplane();
+    
+        Cargo currentCargo = initialCargo;
+        while (currentCargo != null && remainingSpace >= currentCargo.getSpace()) {
+            airplane.addCargo(currentCargo);
+            remainingSpace -= currentCargo.getSpace();
+            // System.out.println("current cargo: " + currentCargo.getName());
+            // System.out.println("remaining space: "+ remainingSpace);
+            removeCargoFromMap(currentCargo);
+    
+            // if (remainingSpace == 6){
+            //     System.out.println(cargoTreeMap);
+            // }
+            Integer fitKey = cargoTreeMap.ceilingKey(remainingSpace);
+            // System.out.println("current key: " + fitKey);
+            currentCargo = getNextAvailableCargo(fitKey);
+        }
+    
+        completedAirplanes.add(airplane);
+    }
+
+    //remove the cargo from the treemap
+    //removes the entire key if the list is empty
+    private void removeCargoFromMap(Cargo cargo) {
+        int space = cargo.getSpace();
+        List<CargoWrapper> list = cargoTreeMap.get(space);
+    
+        if (list == null || list.isEmpty()) return;
+    
+        CargoWrapper wrapper = list.get(0);
+        wrapper.decrement(); // decrease quantity inside the wrapper
+    
+        if (wrapper.getQuantity() <= 0) {
+            list.remove(0); // remove wrapper if used up
+        }
+    
+        if (list.isEmpty()) {
+            cargoTreeMap.remove(space);
+        }
+    }
+    
+    //return the first cargo in line
+    private Cargo getNextAvailableCargo(Integer space) {
+        if (space == null) return null;
+        List<CargoWrapper> list = cargoTreeMap.get(space);
+        if (list == null || list.isEmpty()) return null;
+        return list.get(0).getCargo();
+    }  
+
     public static TreeMap<Integer, List<CargoWrapper>> transformToTreeMap(Map<Cargo, Integer> cargoMap){
         TreeMap<Integer, List<CargoWrapper>> cargoTreeMap = new TreeMap<>(Collections.reverseOrder()); //create a tree map with reverse order
 
@@ -21,13 +101,5 @@ public class BestFitDecreasing {
             }
         }
         return cargoTreeMap; //return the tree map
-    }
-
-    public static void main(String[] args) {
-        Map<Cargo, Integer> cargoMap = new HashMap<>(); 
-        cargoMap = ExcelReader.ReadFromExcel("C:\\Users\\Teoh Wei Hong\\Documents\\Programming\\Own study\\DSA\\DSA\\app\\src\\main\\java\\dsa\\airplane_cargo.xlsx"); //read the cargoes from the excel file
-        TreeMap<Integer, List<CargoWrapper>> cargoTreeMap = transformToTreeMap(cargoMap); //transform the map to a tree map
-
-        System.out.println("Cargo Tree Map: " + cargoTreeMap); //print the tree map
     }
 }
