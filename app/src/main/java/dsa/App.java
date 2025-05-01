@@ -24,42 +24,42 @@ public class App {
             }
         }
 
-        int sum = 0;
-        int limit = 30; // Number of airplanes to show
-        System.out.println("First few completed airplanes:");
-        List<Airplane> completed = bfd.getCompletedAirplanes();
-        for (int i = 0; i < Math.min(limit, completed.size()); i++) {
-            Airplane plane = completed.get(i);
-            sum += plane.getCargoListSize();
-            System.out.println("Airplane #" + (i + 1));
-            System.out.println(plane);
-        }
-        System.out.println("...");
-        System.out.println("Total Airplanes used: " + completed.size());
-        System.out.println("Total Cargoes loaded: " + sum);
+        // int sum = 0;
+        // int limit = 30; // Number of airplanes to show
+        // System.out.println("First few completed airplanes:");
+        // List<Airplane> completed = bfd.getCompletedAirplanes();
+        // for (int i = 0; i < Math.min(limit, completed.size()); i++) {
+        //     Airplane plane = completed.get(i);
+        //     sum += plane.getCargoListSize();
+        //     System.out.println("Airplane #" + (i + 1));
+        //     System.out.println(plane);
+        // }
+        // System.out.println("...");
+        // System.out.println("Total Airplanes used: " + completed.size());
+        // System.out.println("Total Cargoes loaded: " + sum);
         ExcelReader.exportToExcel("BFD_report.xlsx", bfd.getCompletedAirplanes(), "BFD_report");
 
         // FFD
         FisrtFitDecreasing ffd = new FisrtFitDecreasing();
         ffd.FFDPacking();
+
+        // int sumFFD = 0;
+
+        // System.out.println("First Fit Decreasing (FFD) Result:");
+        // List<Airplane> ffdCompleted = ffd.getCompletedAirplanes();
+
+        // for (int i = 0; i < Math.min(limit, ffdCompleted.size()); i++) {
+        //     Airplane plane = ffdCompleted.get(i);
+        //     sumFFD += plane.getCargoListSize();
+        //     System.out.println("Airplane #" + (i + 1));
+        //     System.out.println(plane);
+        // }
+
+        // System.out.println("...");
+        // System.out.println("Total Airplanes used (FFD): " + ffdCompleted.size());
+        // System.out.println("Total Cargoes loaded (FFD): " + sumFFD);
+
         ExcelReader.exportToExcel("FFD_report.xlsx", ffd.getCompletedAirplanes(), "FFD_report");
-
-        int sumFFD = 0;
-
-        System.out.println("First Fit Decreasing (FFD) Result:");
-        List<Airplane> ffdCompleted = ffd.getCompletedAirplanes();
-
-        for (int i = 0; i < Math.min(limit, ffdCompleted.size()); i++) {
-            Airplane plane = ffdCompleted.get(i);
-            sumFFD += plane.getCargoListSize();
-            System.out.println("Airplane #" + (i + 1));
-            System.out.println(plane);
-        }
-
-        System.out.println("...");
-        System.out.println("Total Airplanes used (FFD): " + ffdCompleted.size());
-        System.out.println("Total Cargoes loaded (FFD): " + sumFFD);
-
     }
 
 }
