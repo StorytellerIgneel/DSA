@@ -14,7 +14,7 @@ public class BestFitDecreasing {
     public BestFitDecreasing() {
         this.completedAirplanes = new ArrayList<Airplane>(); //initialize the completed airplanes list
         this.availableAirplane = new Airplane();
-        this.cargoTreeMap = transformToTreeMap(ExcelReader.ReadFromExcel("C:\\Users\\Teoh Wei Hong\\Documents\\Programming\\Own study\\DSA\\DSA\\app\\src\\main\\java\\dsa\\airplane_cargo.xlsx")); //read the cargoes from the excel file
+        this.cargoTreeMap = transformToTreeMap(ExcelReader.ReadFromExcel("src\\main\\java\\dsa\\airplane_cargo.xlsx")); //read the cargoes from the excel file
     }
 
     public ArrayList<Airplane> getCompletedAirplanes() {
@@ -38,7 +38,7 @@ public class BestFitDecreasing {
     //main logic
     //runs similar to recursive, add cargo -> search for cargo with less remaining space -> until no more cargo that fits
     public void loadCargo(Cargo initialCargo) {
-        int remainingSpace = 10;
+        int remainingSpace = 100;
         Airplane airplane = new Airplane();
     
         Cargo currentCargo = initialCargo;

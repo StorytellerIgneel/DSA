@@ -3,32 +3,32 @@
  */
 package dsa;
 
-import java.util.*;
+import java.util.List;
 
 public class App {
 
     public static void main(String[] args) {
-        BestFitDecreasing bfd = new BestFitDecreasing();
+        // BestFitDecreasing bfd = new BestFitDecreasing();
 
-        while (!bfd.getCargoTreeMap().isEmpty()) {
-            Integer key = bfd.getCargoTreeMap().firstKey(); // largest key
-            List<CargoWrapper> wrappers = bfd.getCargoTreeMap().get(key);
+        // while (!bfd.getCargoTreeMap().isEmpty()) {
+        //     Integer key = bfd.getCargoTreeMap().firstKey(); // largest key
+        //     List<CargoWrapper> wrappers = bfd.getCargoTreeMap().get(key);
 
-            while (!wrappers.isEmpty()) {
-                Cargo cargo = wrappers.get(0).getCargo();
-                bfd.loadCargo(cargo);
-            }
+        //     while (!wrappers.isEmpty()) {
+        //         Cargo cargo = wrappers.get(0).getCargo();
+        //         bfd.loadCargo(cargo);
+        //     }
 
-            if (wrappers.isEmpty()) {
-                bfd.getCargoTreeMap().remove(key);
-            }
-        }
+        //     if (wrappers.isEmpty()) {
+        //         bfd.getCargoTreeMap().remove(key);
+        //     }
+        // }
 
         // int sum = 0;
-        // int limit = 30; // Number of airplanes to show
+        // //int limit = 30; // Number of airplanes to show
         // System.out.println("First few completed airplanes:");
         // List<Airplane> completed = bfd.getCompletedAirplanes();
-        // for (int i = 0; i < Math.min(limit, completed.size()); i++) {
+        // for (int i = 0; i < completed.size(); i++) {
         //     Airplane plane = completed.get(i);
         //     sum += plane.getCargoListSize();
         //     System.out.println("Airplane #" + (i + 1));
@@ -37,29 +37,34 @@ public class App {
         // System.out.println("...");
         // System.out.println("Total Airplanes used: " + completed.size());
         // System.out.println("Total Cargoes loaded: " + sum);
-        ExcelReader.exportToExcel("BFD_report.xlsx", bfd.getCompletedAirplanes(), "BFD_report");
+        // ExcelReader.exportToExcel("BFD_report.xlsx", bfd.getCompletedAirplanes(), "BFD_report");
 
         // FFD
-        FisrtFitDecreasing ffd = new FisrtFitDecreasing();
-        ffd.FFDPacking();
-
-        // int sumFFD = 0;
-
-        // System.out.println("First Fit Decreasing (FFD) Result:");
-        // List<Airplane> ffdCompleted = ffd.getCompletedAirplanes();
-
-        // for (int i = 0; i < Math.min(limit, ffdCompleted.size()); i++) {
-        //     Airplane plane = ffdCompleted.get(i);
-        //     sumFFD += plane.getCargoListSize();
-        //     System.out.println("Airplane #" + (i + 1));
-        //     System.out.println(plane);
-        // }
-
-        // System.out.println("...");
-        // System.out.println("Total Airplanes used (FFD): " + ffdCompleted.size());
-        // System.out.println("Total Cargoes loaded (FFD): " + sumFFD);
-
-        ExcelReader.exportToExcel("FFD_report.xlsx", ffd.getCompletedAirplanes(), "FFD_report");
+        FirstFit ff = new FirstFit("src\\main\\java\\dsa\\airplane_cargo.xlsx");
+        
+        // 2. Run the packing
+        ff.pack();
+        
+        // 3. Print results
+        List<Airplane> ffPlanes = ff.getCompletedAirplanes();
+        int totalCargo = 0;
+        System.out.println("First Fit (FF) Result:");
+        for (int i = 0; i < ffPlanes.size(); i++) {
+            Airplane plane = ffPlanes.get(i);
+            totalCargo += plane.getCargoListSize();
+            System.out.println("Airplane #" + (i + 1));
+            System.out.println(plane);
+        }
+        System.out.println("...");
+        System.out.println("Total Airplanes used (FF): " + ffPlanes.size());
+        System.out.println("Total Cargoes loaded (FF): " + totalCargo);
+        
+        // 4. Export to Excel (uses the same sheet‐name overload)
+        ExcelReader.exportToExcel(
+            "FirstFit_Report.xlsx",
+            ffPlanes,
+            "First Fit Report"
+        );
     }
-
 }
+

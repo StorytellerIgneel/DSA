@@ -1,6 +1,7 @@
 package dsa;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class Airplane {
     private String ID;
@@ -9,7 +10,7 @@ public class Airplane {
 
     public Airplane() {
         this.ID = UUID.randomUUID().toString(); //generate a random ID for the airplane
-        this.storageSpace = 10; //set the storage space to 10
+        this.storageSpace = 100; //set the storage space to 10
         this.cargoList = new ArrayList<>(); //initialize the cargo list with the storage space
     }
 
