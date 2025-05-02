@@ -11,44 +11,11 @@ public class App {
         bfd.sortCargo("BFD_report.xlsx", "BFD_report");
 
         // FFD
-        // FisrtFitDecreasing ffd = new FisrtFitDecreasing();
-        // ffd.FFDPacking();
-
-        // int sumFFD = 0;
-
-        // System.out.println("First Fit Decreasing (FFD) Result:");
-        // List<Airplane> ffdCompleted = ffd.getCompletedAirplanes();
-
-        // for (int i = 0; i < Math.min(limit, ffdCompleted.size()); i++) {
-        //     Airplane plane = ffdCompleted.get(i);
-        //     sumFFD += plane.getCargoListSize();
-        //     System.out.println("Airplane #" + (i + 1));
-        //     System.out.println(plane);
-        // }
-
-        // System.out.println("...");
-        // System.out.println("Total Airplanes used: " + completed.size());
-        // System.out.println("Total Cargoes loaded: " + sum);
-        //ExcelReader.exportToExcel("BFD_report.xlsx", bfd.getCompletedAirplanes(), "BFD_Solution");
-
-        // FFD
-        FirstFit ff = new FirstFit();
+        FirstFit ff = new FirstFit("src\\main\\java\\dsa\\airplane_cargo.xlsx");
         
         ff.FFPacking();
         
-        // int totalCargo = 0;
-        // System.out.println("First Fit (FF) Result:");
-        // for (int i = 0; i < ffPlanes.size(); i++) {
-        //     Airplane plane = ffPlanes.get(i);
-        //     totalCargo += plane.getCargoListSize();
-        //     System.out.println("Airplane #" + (i + 1));
-        //     System.out.println(plane);
-        // }
-        // System.out.println("...");
-        // System.out.println("Total Airplanes used (FF): " + ffPlanes.size());
-        // System.out.println("Total Cargoes loaded (FF): " + totalCargo);
-        
-        ExcelReader.exportToExcel("FirstFit_Report.xlsx", ff.getCompletedAirplanes(),"First Fit Report");
+        ExcelReader.exportToExcel("FirstFit_report.xlsx", ff.getCompletedAirplanes(),"First Fit Report");
     }
 
 }
