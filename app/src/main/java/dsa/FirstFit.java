@@ -14,7 +14,7 @@ public class FirstFit {
     public FirstFit() {
         this.completedAirplanes = new ArrayList<>();
 
-        this.cargoMap = ExcelReader.ReadFromExcel("src\\main\\java\\dsa\\airplane_cargo.xlsx");
+        this.cargoMap = ExcelReader.ReadFromExcel("C:\\Users\\Teoh Wei Hong\\Documents\\Programming\\Own study\\DSA\\DSA\\app\\src\\main\\java\\dsa\\airplane_cargo.xlsx");
 
         //Expand into a flat list of Cargo items in exact Excel order
         this.allCargoItems = new ArrayList<>();
