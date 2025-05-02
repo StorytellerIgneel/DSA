@@ -24,13 +24,7 @@ public class BestFitDecreasing {
     public TreeMap<Integer, List<CargoWrapper>> getCargoTreeMap() {
         return cargoTreeMap;
     }
-
-    //create new airplane(bin) and put it into the available airplanes list of the available space
-    public void shipAirplane(){
-        completedAirplanes.add(availableAirplane); //add the airplane to the completed airplanes list
-        this.availableAirplane = new Airplane(); //create a new airplane
-    }
-
+    
     //main logic
     //runs similar to recursive, add cargo -> search for cargo with less remaining space -> until no more cargo that fits
     public void loadCargo(Cargo initialCargo) {

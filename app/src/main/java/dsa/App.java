@@ -21,22 +21,7 @@ public class App {
                 bfd.getCargoTreeMap().remove(key);
             }
         }
-    
-        // int sum = 0;
-        // int limit = 30; // Number of airplanes to show
-        // System.out.println("First few completed airplanes:");
 
-        // List<Airplane> completed = bfd.getCompletedAirplanes();
-        // for (int i = 0; i < Math.min(limit, completed.size()); i++) {
-        //     Airplane plane = completed.get(i);
-        //     sum += plane.getCargoListSize();
-        //     System.out.println("Airplane #" + (i + 1));
-        //     System.out.println(plane);
-        // }
-
-        // System.out.println("...");
-        // System.out.println("Total Airplanes used: " + completed.size());
-        // System.out.println("Total Cargoes loaded: " + sum);
         ExcelReader.exportToExcel("BFD_report.xlsx", bfd.getCompletedAirplanes());
     }
     
