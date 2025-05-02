@@ -29,14 +29,13 @@ public class App {
         // System.out.println("...");
         // System.out.println("Total Airplanes used: " + completed.size());
         // System.out.println("Total Cargoes loaded: " + sum);
-        ExcelReader.exportToExcel("BFD_report.xlsx", bfd.getCompletedAirplanes(), "BFD_Solution");
+        //ExcelReader.exportToExcel("BFD_report.xlsx", bfd.getCompletedAirplanes(), "BFD_Solution");
 
         // FFD
         FirstFit ff = new FirstFit();
         
         ff.FFPacking();
         
-        // List<Airplane> ffPlanes = ff.getCompletedAirplanes();
         // int totalCargo = 0;
         // System.out.println("First Fit (FF) Result:");
         // for (int i = 0; i < ffPlanes.size(); i++) {
