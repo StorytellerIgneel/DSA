@@ -52,9 +52,9 @@ public class ExcelReader {
         return cargoMap;
     }
 
-    public static void exportToExcel(String filepath, List <Airplane> completedAirplanes){
+    public static void exportToExcel(String filepath, List <Airplane> completedAirplanes, String sheetName){
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("BFD solution");
+        Sheet sheet = workbook.createSheet(sheetName);
 
         //header row
         Row headerRow = sheet.createRow(0);
