@@ -11,9 +11,11 @@ public class App {
         bfd.sortCargo("BFD_report.xlsx", "BFD_report");
 
         // FFD
-        FirstFit ff = new FirstFit();
+        FirstFit ff = new FirstFit("src\\main\\java\\dsa\\airplane_cargo.xlsx");
+        
         ff.FFPacking();
-        ExcelReader.exportToExcel("FirstFit_Report.xlsx", ff.getCompletedAirplanes(),"First Fit Report");
+        
+        ExcelReader.exportToExcel("FirstFit_report.xlsx", ff.getCompletedAirplanes(),"First Fit Report");
     }
 
 }
