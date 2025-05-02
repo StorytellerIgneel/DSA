@@ -1,6 +1,10 @@
 package dsa;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class BestFitDecreasing {
     private ArrayList<Airplane> completedAirplanes; //list of airplanes in the airport
@@ -10,7 +14,7 @@ public class BestFitDecreasing {
     public BestFitDecreasing() {
         this.completedAirplanes = new ArrayList<Airplane>(); //initialize the completed airplanes list
         this.availableAirplane = new Airplane();
-        this.cargoTreeMap = transformToTreeMap(ExcelReader.ReadFromExcel("C:\\Users\\Teoh Wei Hong\\Documents\\Programming\\Own study\\DSA\\DSA\\app\\src\\main\\java\\dsa\\airplane_cargo.xlsx")); //read the cargoes from the excel file
+        this.cargoTreeMap = transformToTreeMap(ExcelReader.ReadFromExcel("src\\main\\java\\dsa\\airplane_cargo.xlsx")); //read the cargoes from the excel file
     }
 
     public ArrayList<Airplane> getCompletedAirplanes() {

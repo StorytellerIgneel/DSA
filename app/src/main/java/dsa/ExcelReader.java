@@ -4,15 +4,22 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelReader {
-    public static Map<Cargo, Integer> ReadFromExcel(String filepath){
-        Map<Cargo, Integer> cargoMap = new HashMap<>(); //for the DS
+    public static LinkedHashMap<Cargo, Integer> ReadFromExcel(String filepath){
+        LinkedHashMap<Cargo, Integer> cargoMap = new LinkedHashMap<>();
+        //Map<Cargo, Integer> cargoMap = new HashMap<>(); //for the DS
         //lets say we have 10 books, it would then look like this: (book, 10)
         //the key is the book, and the value is the quantity of the book
 
@@ -52,9 +59,9 @@ public class ExcelReader {
         return cargoMap;
     }
 
-    public static void exportToExcel(String filepath, List <Airplane> completedAirplanes){
+    public static void exportToExcel(String filepath, List <Airplane> completedAirplanes, String sheetName){
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("BFD solution");
+        Sheet sheet = workbook.createSheet(sheetName);
 
         //header row
         Row headerRow = sheet.createRow(0);
