@@ -59,7 +59,7 @@ public class ExcelReader {
         return cargoMap;
     }
 
-    public static void exportToExcel(String filepath, List <Airplane> completedAirplanes, String sheetName){
+    public static void exportToExcel(String filepath, String sheetName, List <Airplane> completedAirplanes){
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet(sheetName);
 

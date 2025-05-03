@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class BestFitDecreasing {
-    private ArrayList<Airplane> completedAirplanes; //list of airplanes in the airport
+public class BestFitDecreasing extends BinPackingAlgorithm {
     private Airplane availableAirplane; //list of available airplanes in the airport
     private TreeMap<Integer, List<CargoWrapper>> cargoTreeMap;
 
@@ -20,11 +19,7 @@ public class BestFitDecreasing {
     public BestFitDecreasing(String filepath) {
         this.completedAirplanes = new ArrayList<Airplane>(); //initialize the completed airplanes list
         this.availableAirplane = new Airplane();
-        this.cargoTreeMap = transformToTreeMap(ExcelReader.ReadFromExcel("src\\main\\java\\dsa\\airplane_cargo.xlsx")); //read the cargoes from the excel file
-    }
-
-    public ArrayList<Airplane> getCompletedAirplanes() {
-        return completedAirplanes; //return the completed airplanes list
+        this.cargoTreeMap = transformToTreeMap(ExcelReader.ReadFromExcel(filepath)); //read the cargoes from the excel file
     }
     
     public Airplane getAvailableAirplane() {
@@ -35,7 +30,8 @@ public class BestFitDecreasing {
         return cargoTreeMap;
     }
 
-    public void sortCargo(String outputFilename, String outputSheetName){
+    @Override
+    public void pack(){
         while (!cargoTreeMap.isEmpty()) {
             Integer key = cargoTreeMap.firstKey(); // largest key
             List<CargoWrapper> wrappers = cargoTreeMap.get(key);
@@ -49,22 +45,6 @@ public class BestFitDecreasing {
                 cargoTreeMap.remove(key);
             }
         }
-
-        //int sum = 0;
-        //int limit = 30; // Number of airplanes to show
-        // System.out.println("First few completed airplanes:");
-        // List<Airplane> completed = bfd.getCompletedAirplanes();
-        // for (int i = 0; i < Math.min(limit, completed.size()); i++) {
-        //     Airplane plane = completed.get(i);
-        //     sum += plane.getCargoListSize();
-        //     System.out.println("Airplane #" + (i + 1));
-        //     System.out.println(plane);
-        // }
-        // System.out.println("...");
-        // System.out.println("Total Airplanes used: " + completed.size());
-        // System.out.println("Total Cargoes loaded: " + sum);
-
-        ExcelReader.exportToExcel("BFD_report.xlsx", getCompletedAirplanes(), "BFD_report");
     }
 
     //main logic
@@ -77,15 +57,9 @@ public class BestFitDecreasing {
         while (currentCargo != null && remainingSpace >= currentCargo.getSpace()) {
             airplane.addCargo(currentCargo);
             remainingSpace -= currentCargo.getSpace();
-            // System.out.println("current cargo: " + currentCargo.getName());
-            // System.out.println("remaining space: "+ remainingSpace);
             removeCargoFromMap(currentCargo);
-    
-            // if (remainingSpace == 6){
-            //     System.out.println(cargoTreeMap);
-            // }
             Integer fitKey = cargoTreeMap.ceilingKey(remainingSpace);
-            // System.out.println("current key: " + fitKey);
+
             currentCargo = getNextAvailableCargo(fitKey);
         }
     

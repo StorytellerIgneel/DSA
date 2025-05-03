@@ -5,9 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FirstFit {
-
-    private List<Airplane> completedAirplanes; // List of airplanes in the airport to store the completed airplanes
+public class FirstFit extends BinPackingAlgorithm {
     private LinkedHashMap<Cargo, Integer> cargoMap; // Map of cargo items and their quantities; LinkedHashMap to maintain insertion order
     private List<Cargo> allCargoItems; // Flat list of all cargo items to be packed
 
@@ -16,11 +14,6 @@ public class FirstFit {
         this.completedAirplanes = new ArrayList<>(); // Initialize the completed airplanes list
         this.cargoMap = ExcelReader.ReadFromExcel(filePath); // Read the cargoes from the excel file
         this.allCargoItems = expandCargoItems(cargoMap); // Expand the cargo map into a flat list of cargo items
-    }
-
-    public List<Airplane> getCompletedAirplanes()
-    {
-        return completedAirplanes;
     }
 
     // Method to expand the LinkedHashMap into a flat list of Cargo items (a list of individual Cargo items)
@@ -40,7 +33,7 @@ public class FirstFit {
     }
 
     // First Fit packing: apply the First Fit algorithm to pack the cargo items into airplanes
-    public void FFPacking()
+    public void pack()
     {
         // Iterate through all cargo items and try to place them in the completed airplanes
         // If no airplane can accommodate the cargo, create a new airplane and place the cargo in it
