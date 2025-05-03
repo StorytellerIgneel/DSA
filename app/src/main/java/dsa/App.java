@@ -10,7 +10,7 @@ public class App {
         bfd.pack();
         bfd.exportPackingResult("BFD_report.xlsx", "BFD_report");
 
-        // FFD
+        // FF
         FirstFit ff = new FirstFit("src\\main\\java\\dsa\\airplane_cargo.xlsx");
         ff.pack();
         ff.exportPackingResult("FirstFit_report.xlsx", "FirstFit_report");

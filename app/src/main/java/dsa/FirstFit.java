@@ -6,55 +6,52 @@ import java.util.List;
 import java.util.Map;
 
 public class FirstFit extends BinPackingAlgorithm {
-    private LinkedHashMap<Cargo, Integer> cargoMap; // Map of cargo items and their quantities; LinkedHashMap to maintain insertion order
-    private List<Cargo> allCargoItems; // Flat list of all cargo items to be packed
 
-    public FirstFit(){
+    private LinkedHashMap<Cargo, Integer> cargoMap; // Map of cargo items and their quantities; maintains insertion order
+    private List<CargoWrapper> cargoWrapperList; // List of CargoWrapper objects, each representing a cargo item and its quantity
+
+    public FirstFit() {
         this.completedAirplanes = new ArrayList<>();
-        this.cargoMap = new LinkedHashMap<Cargo, Integer>();
+        this.cargoMap = new LinkedHashMap<>();
+        this.cargoWrapperList = new ArrayList<>();
     }
 
-    public FirstFit(String filePath)
-    {
+    public FirstFit(String filePath) {
         super();
-        this.cargoMap = importCargoData(filePath); // Read the cargoes from the excel file
-        this.allCargoItems = expandCargoItems(cargoMap); // Expand the cargo map into a flat list of cargo items
+        this.cargoMap = importCargoData(filePath); // Read the cargoes from the Excel file
+        this.cargoWrapperList = expandCargoItems(cargoMap); // Expand the cargo map into a flat list of cargo items
+        this.completedAirplanes = new ArrayList<>(); // List of completed airplanes
     }
 
-     // First Fit packing: apply the First Fit algorithm to pack the cargo items into airplanes
-     public void pack()
-     {
-         // Iterate through all cargo items and try to place them in the completed airplanes
-         // If no airplane can accommodate the cargo, create a new airplane and place the cargo in it
-         for (Cargo cargo : allCargoItems) {
-             boolean placed = false;
-             for (Airplane plane : completedAirplanes) {
-                 if (plane.getStorageSpace() >= cargo.getSpace()) {
-                     plane.addCargo(cargo);
-                     placed = true;
-                     break;
-                 }
-             }
-             if (!placed) {
-                 Airplane newPlane = new Airplane();
-                 newPlane.addCargo(cargo);
-                 completedAirplanes.add(newPlane);
-             }
-         }
-     }
-
-    // Method to expand the LinkedHashMap into a flat list of Cargo items (a list of individual Cargo items)
-    private List<Cargo> expandCargoItems(LinkedHashMap<Cargo, Integer> cargoMap)
-    {
-        List<Cargo> expandedCargoItems = new ArrayList<>(); // List to store the expanded cargo items
-
-        // Iterate through the cargoMap and add each Cargo item to the expanded list based on its quantity
-        for (Map.Entry<Cargo, Integer> entry : cargoMap.entrySet()) {
-            Cargo cargo = entry.getKey();
-            int quantity = entry.getValue();
-            for (int i = 0; i < quantity; i++) {
-                expandedCargoItems.add(new Cargo(cargo.getName(), cargo.getSpace()));
+    @Override
+    // First Fit packing: apply the First Fit algorithm to pack the cargo items into airplanes
+    public void pack() {
+        for (CargoWrapper wrapper : cargoWrapperList) {
+            while (wrapper.getQuantity() > 0) {
+                boolean placed = false;
+                for (Airplane plane : completedAirplanes) {
+                    if (plane.getStorageSpace() >= wrapper.getCargo().getSpace()) {
+                        plane.addCargo(new Cargo(wrapper.getCargo().getName(), wrapper.getCargo().getSpace()));
+                        wrapper.decrement();
+                        placed = true;
+                        break;
+                    }
+                }
+                if (!placed) {
+                    Airplane newPlane = new Airplane();
+                    newPlane.addCargo(new Cargo(wrapper.getCargo().getName(), wrapper.getCargo().getSpace()));
+                    wrapper.decrement();
+                    completedAirplanes.add(newPlane);
+                }
             }
+        }
+    }
+
+    // Convert the cargo map into a list of CargoWrapper items
+    private List<CargoWrapper> expandCargoItems(LinkedHashMap<Cargo, Integer> cargoMap) {
+        List<CargoWrapper> expandedCargoItems = new ArrayList<>();
+        for (Map.Entry<Cargo, Integer> entry : cargoMap.entrySet()) {
+            expandedCargoItems.add(new CargoWrapper(entry.getKey(), entry.getValue()));
         }
         return expandedCargoItems;
     }
@@ -67,11 +64,11 @@ public class FirstFit extends BinPackingAlgorithm {
         this.cargoMap = cargoMap;
     }
 
-    public List<Cargo> getAllCargoItems() {
-        return allCargoItems;
+    public List<CargoWrapper> getAllCargoItems() {
+        return cargoWrapperList;
     }
 
-    public void setAllCargoItems(List<Cargo> allCargoItems) {
-        this.allCargoItems = allCargoItems;
+    public void setAllCargoItems(List<CargoWrapper> cargoWrapperList) {
+        this.cargoWrapperList = cargoWrapperList;
     }
 }
