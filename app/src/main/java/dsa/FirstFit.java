@@ -26,6 +26,11 @@ public class FirstFit extends BinPackingAlgorithm {
     @Override
     // First Fit packing: apply the First Fit algorithm to pack the cargo items into airplanes
     public void pack() {
+        if (cargoWrapperList == null || cargoWrapperList.isEmpty()) {
+            System.err.println("No cargo items to pack.");
+            return;
+        }
+
         for (CargoWrapper wrapper : cargoWrapperList) {
             while (wrapper.getQuantity() > 0) {
                 boolean placed = false;
@@ -50,7 +55,19 @@ public class FirstFit extends BinPackingAlgorithm {
     // Convert the cargo map into a list of CargoWrapper items
     private List<CargoWrapper> expandCargoItems(LinkedHashMap<Cargo, Integer> cargoMap) {
         List<CargoWrapper> expandedCargoItems = new ArrayList<>();
+        
         for (Map.Entry<Cargo, Integer> entry : cargoMap.entrySet()) {
+
+            if (entry.getKey() == null || entry.getValue() == null) {
+                System.err.println("Skipping invalid cargo entry: null value found.");
+                continue;
+            }
+
+            if (entry.getValue() <= 0) {
+                System.err.println("Skipping cargo with non-positive quantity: " + entry.getKey().getName());
+                continue;
+            }
+
             expandedCargoItems.add(new CargoWrapper(entry.getKey(), entry.getValue()));
         }
         return expandedCargoItems;
@@ -61,6 +78,10 @@ public class FirstFit extends BinPackingAlgorithm {
     }
 
     public void setCargoMap(LinkedHashMap<Cargo, Integer> cargoMap) {
+        if (cargoMap == null) {
+            throw new IllegalArgumentException("Cargo map cannot be null.");
+        }
+
         this.cargoMap = cargoMap;
     }
 
@@ -69,6 +90,10 @@ public class FirstFit extends BinPackingAlgorithm {
     }
 
     public void setAllCargoItems(List<CargoWrapper> cargoWrapperList) {
+        if (cargoWrapperList == null) {
+            throw new IllegalArgumentException("Cargo wrapper list cannot be null.");
+        }
+        
         this.cargoWrapperList = cargoWrapperList;
     }
 }
