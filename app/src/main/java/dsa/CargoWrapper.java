@@ -5,12 +5,21 @@ public class CargoWrapper {
     private int quantity;
 
     public CargoWrapper(Cargo cargo, int quantity) {
+        if (cargo == null) {
+            throw new IllegalArgumentException("Cargo cannot be null.");
+        }
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Quantity cannot be negative.");
+        }
+
         this.cargo = cargo;
         this.quantity = quantity;
     }
+
     public Cargo getCargo() {
         return cargo;
     }
+    
     public int getQuantity() {
         return quantity;
     }
