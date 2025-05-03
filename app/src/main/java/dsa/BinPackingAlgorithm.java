@@ -4,8 +4,12 @@ import java.util.*;
 
 public abstract class BinPackingAlgorithm implements PackingStrategy{
     protected List<Airplane> completedAirplanes;
-    
+
     protected Map<Cargo, Integer> cargoData;
+
+    public BinPackingAlgorithm(){
+        this.completedAirplanes = new ArrayList<>();
+    }
 
     @Override
     public List<Airplane> getCompletedAirplanes(){
@@ -13,7 +17,7 @@ public abstract class BinPackingAlgorithm implements PackingStrategy{
     }
 
     @Override
-    public Map<Cargo, Integer> importCargoData(String filepath){
+    public LinkedHashMap<Cargo, Integer> importCargoData(String filepath){
         return ExcelReader.ReadFromExcel(filepath);
     }
 

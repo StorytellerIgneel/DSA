@@ -9,12 +9,39 @@ public class FirstFit extends BinPackingAlgorithm {
     private LinkedHashMap<Cargo, Integer> cargoMap; // Map of cargo items and their quantities; LinkedHashMap to maintain insertion order
     private List<Cargo> allCargoItems; // Flat list of all cargo items to be packed
 
+    public FirstFit(){
+        this.completedAirplanes = new ArrayList<>();
+        this.cargoMap = new LinkedHashMap<Cargo, Integer>();
+    }
+
     public FirstFit(String filePath)
     {
-        this.completedAirplanes = new ArrayList<>(); // Initialize the completed airplanes list
-        this.cargoMap = ExcelReader.ReadFromExcel(filePath); // Read the cargoes from the excel file
+        super();
+        this.cargoMap = importCargoData(filePath); // Read the cargoes from the excel file
         this.allCargoItems = expandCargoItems(cargoMap); // Expand the cargo map into a flat list of cargo items
     }
+
+     // First Fit packing: apply the First Fit algorithm to pack the cargo items into airplanes
+     public void pack()
+     {
+         // Iterate through all cargo items and try to place them in the completed airplanes
+         // If no airplane can accommodate the cargo, create a new airplane and place the cargo in it
+         for (Cargo cargo : allCargoItems) {
+             boolean placed = false;
+             for (Airplane plane : completedAirplanes) {
+                 if (plane.getStorageSpace() >= cargo.getSpace()) {
+                     plane.addCargo(cargo);
+                     placed = true;
+                     break;
+                 }
+             }
+             if (!placed) {
+                 Airplane newPlane = new Airplane();
+                 newPlane.addCargo(cargo);
+                 completedAirplanes.add(newPlane);
+             }
+         }
+     }
 
     // Method to expand the LinkedHashMap into a flat list of Cargo items (a list of individual Cargo items)
     private List<Cargo> expandCargoItems(LinkedHashMap<Cargo, Integer> cargoMap)
@@ -32,25 +59,19 @@ public class FirstFit extends BinPackingAlgorithm {
         return expandedCargoItems;
     }
 
-    // First Fit packing: apply the First Fit algorithm to pack the cargo items into airplanes
-    public void pack()
-    {
-        // Iterate through all cargo items and try to place them in the completed airplanes
-        // If no airplane can accommodate the cargo, create a new airplane and place the cargo in it
-        for (Cargo cargo : allCargoItems) {
-            boolean placed = false;
-            for (Airplane plane : completedAirplanes) {
-                if (plane.getStorageSpace() >= cargo.getSpace()) {
-                    plane.addCargo(cargo);
-                    placed = true;
-                    break;
-                }
-            }
-            if (!placed) {
-                Airplane newPlane = new Airplane();
-                newPlane.addCargo(cargo);
-                completedAirplanes.add(newPlane);
-            }
-        }
+    public LinkedHashMap<Cargo, Integer> getCargoMap() {
+        return cargoMap;
+    }
+
+    public void setCargoMap(LinkedHashMap<Cargo, Integer> cargoMap) {
+        this.cargoMap = cargoMap;
+    }
+
+    public List<Cargo> getAllCargoItems() {
+        return allCargoItems;
+    }
+
+    public void setAllCargoItems(List<Cargo> allCargoItems) {
+        this.allCargoItems = allCargoItems;
     }
 }

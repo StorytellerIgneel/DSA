@@ -11,23 +11,15 @@ public class BestFitDecreasing extends BinPackingAlgorithm {
     private TreeMap<Integer, List<CargoWrapper>> cargoTreeMap;
 
     public BestFitDecreasing(){
-        this.completedAirplanes = new ArrayList<Airplane>(); //initialize the completed airplanes list
+        super();
         this.availableAirplane = new Airplane();
         this.cargoTreeMap = new TreeMap<>(); //read the cargoes from the excel file
     }
 
     public BestFitDecreasing(String filepath) {
-        this.completedAirplanes = new ArrayList<Airplane>(); //initialize the completed airplanes list
+        super();
         this.availableAirplane = new Airplane();
-        this.cargoTreeMap = transformToTreeMap(ExcelReader.ReadFromExcel(filepath)); //read the cargoes from the excel file
-    }
-    
-    public Airplane getAvailableAirplane() {
-        return availableAirplane; //return the available airplanes list
-    }
-
-    public TreeMap<Integer, List<CargoWrapper>> getCargoTreeMap() {
-        return cargoTreeMap;
+        this.cargoTreeMap = transformToTreeMap(importCargoData(filepath)); //read the cargoes from the excel file
     }
 
     @Override
@@ -92,7 +84,7 @@ public class BestFitDecreasing extends BinPackingAlgorithm {
         List<CargoWrapper> list = cargoTreeMap.get(space);
         if (list == null || list.isEmpty()) return null;
         return list.get(0).getCargo();
-    }  
+    }
 
     public static TreeMap<Integer, List<CargoWrapper>> transformToTreeMap(Map<Cargo, Integer> cargoMap){
         TreeMap<Integer, List<CargoWrapper>> cargoTreeMap = new TreeMap<>(Collections.reverseOrder()); //create a tree map with reverse order
@@ -111,5 +103,21 @@ public class BestFitDecreasing extends BinPackingAlgorithm {
             }
         }
         return cargoTreeMap; //return the tree map
+    }
+
+    public Airplane getAvailableAirplane() {
+        return availableAirplane; //return the available airplanes list
+    }
+    
+    public void setAvailableAirplane(Airplane airplane){
+        this.availableAirplane = airplane;
+    }
+
+    public TreeMap<Integer, List<CargoWrapper>> getCargoTreeMap() {
+        return cargoTreeMap;
+    }
+
+    public void setCargoTreeMap(TreeMap<Integer, List<CargoWrapper>> cargoTreeMap){
+        this.cargoTreeMap = cargoTreeMap;
     }
 }

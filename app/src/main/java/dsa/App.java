@@ -6,16 +6,14 @@ package dsa;
 public class App {
 
     public static void main(String[] args) {
-        BestFitDecreasing bfd = new BestFitDecreasing("C:\\Users\\Teoh Wei Hong\\Documents\\Programming\\Own study\\DSA\\DSA\\app\\src\\main\\java\\dsa\\airplane_cargo.xlsx");
-
-        bfd.sortCargo("BFD_report.xlsx", "BFD_report");
+        BestFitDecreasing bfd = new BestFitDecreasing("src\\main\\java\\dsa\\airplane_cargo.xlsx");
+        bfd.pack();
+        bfd.exportPackingResult("BFD_report.xlsx", "BFD_report");
 
         // FFD
         FirstFit ff = new FirstFit("src\\main\\java\\dsa\\airplane_cargo.xlsx");
-        
-        ff.FFPacking();
-        
-        ExcelReader.exportToExcel("FirstFit_report.xlsx", ff.getCompletedAirplanes(),"First Fit Report");
+        ff.pack();
+        ff.exportPackingResult("FirstFit_report.xlsx", "FirstFit_report");
     }
 
 }
