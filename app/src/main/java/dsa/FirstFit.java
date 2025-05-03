@@ -35,18 +35,24 @@ public class FirstFit extends BinPackingAlgorithm {
             while (wrapper.getQuantity() > 0) {
                 boolean placed = false;
                 for (Airplane plane : completedAirplanes) {
-                    if (plane.getStorageSpace() >= wrapper.getCargo().getSpace()) {
-                        plane.addCargo(new Cargo(wrapper.getCargo().getName(), wrapper.getCargo().getSpace()));
-                        wrapper.decrement();
-                        placed = true;
-                        break;
+                    try {
+                        if (plane.getStorageSpace() >= wrapper.getCargo().getSpace()) {
+                            plane.addCargo(new Cargo(wrapper.getCargo().getName(), wrapper.getCargo().getSpace()));
+                            wrapper.decrement();
+                            placed = true;
+                            break;
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error while adding cargo to airplane: " + e.getMessage());
                     }
                 }
-                if (!placed) {
+                try {
                     Airplane newPlane = new Airplane();
                     newPlane.addCargo(new Cargo(wrapper.getCargo().getName(), wrapper.getCargo().getSpace()));
                     wrapper.decrement();
                     completedAirplanes.add(newPlane);
+                } catch (Exception e) {
+                    System.err.println("Error while creating a new airplane or adding cargo: " + e.getMessage());
                 }
             }
         }
