@@ -1,6 +1,9 @@
 package dsa;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class BinPackingAlgorithm implements PackingStrategy{
     protected List<Airplane> completedAirplanes;
@@ -18,12 +21,29 @@ public abstract class BinPackingAlgorithm implements PackingStrategy{
 
     @Override
     public LinkedHashMap<Cargo, Integer> importCargoData(String filepath){
-        return ExcelReader.ReadFromExcel(filepath);
+        if (filepath == null || filepath.trim().isEmpty()) {
+            throw new IllegalArgumentException("Filepath cannot be null or empty.");
+        }
+
+        try {
+            return ExcelReader.ReadFromExcel(filepath);
+        } catch (Exception e) {
+            System.err.println("Error importing cargo data from file: " + e.getMessage());
+            return new LinkedHashMap<>(); // Return an empty map if an error occurs
+        }
     }
 
     @Override
     public void exportPackingResult(String inputFilepath, String outputFilepath){
-        ExcelReader.exportToExcel(inputFilepath, outputFilepath, completedAirplanes);
+        if (outputFilepath == null || outputFilepath.trim().isEmpty()) {
+            throw new IllegalArgumentException("Output filepath cannot be null or empty.");
+        }
+
+        try {
+            ExcelReader.exportToExcel(outputFilepath, "Packing Results", completedAirplanes);
+        } catch (Exception e) {
+            System.err.println("Error exporting packing results to file: " + e.getMessage());
+        }
     }
 
     @Override

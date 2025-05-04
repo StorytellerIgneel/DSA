@@ -1,9 +1,10 @@
 package dsa;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class Airplane {
-    private String ID;
+    private final String ID;
     private int storageSpace;
     private ArrayList<Cargo> cargoList;
 
@@ -14,6 +15,14 @@ public class Airplane {
     }
 
     public Airplane(String ID, int storageSpace, Cargo cargo) {
+        if (ID == null || ID.isEmpty()) {
+            throw new IllegalArgumentException("Airplane ID cannot be null or empty.");
+        }
+
+        if (storageSpace <= 0) {
+            throw new IllegalArgumentException("Storage space must be greater than zero.");
+        }
+
         this.ID = ID;
         this.storageSpace = storageSpace;
         this.cargoList = new ArrayList<>(); //initialize the cargo list with the storage space
@@ -40,6 +49,14 @@ public class Airplane {
     }
 
     public void addCargo(Cargo cargo) {
+        if (cargo == null) {
+            throw new IllegalArgumentException("Cargo cannot be null.");
+        }
+
+        if (cargo.getSpace() > this.storageSpace) {
+            throw new IllegalArgumentException("Not enough storage space to add this cargo.");
+        }
+        
         cargoList.add(cargo); //add the cargo to the list
         this.storageSpace -= cargo.getSpace(); //decrease the storage space by the cargo space
     }

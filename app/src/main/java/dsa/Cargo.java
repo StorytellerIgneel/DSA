@@ -1,10 +1,17 @@
 package dsa;
 
 public class Cargo implements Comparable<Cargo> {
-    private String name;
-    private int space;
+    private final String name;
+    private final int space;
 
     public Cargo(String name, int capacity) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Cargo name cannot be null or empty.");
+        }
+        if (capacity <= 0) {
+            throw new IllegalArgumentException("Cargo space must be greater than zero.");
+        }
+
         this.name = name;
         this.space = capacity;
     }
@@ -19,6 +26,9 @@ public class Cargo implements Comparable<Cargo> {
 
     @Override
     public int compareTo(Cargo other){
+        if (other == null) {
+            throw new IllegalArgumentException("Cannot compare with null Cargo.");
+        }
         return Integer.compare(this.space, other.space);
     }
 

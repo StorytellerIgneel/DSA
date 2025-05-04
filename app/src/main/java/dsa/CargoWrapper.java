@@ -27,6 +27,8 @@ public class CargoWrapper {
     public void decrement() {
         if (quantity > 0) {
             quantity--;
+        } else {
+            throw new IllegalStateException("Cannot decrement quantity below zero.");
         }
     }
 

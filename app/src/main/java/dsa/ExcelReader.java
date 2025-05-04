@@ -23,39 +23,54 @@ public class ExcelReader {
         //lets say we have 10 books, it would then look like this: (book, 10)
         //the key is the book, and the value is the quantity of the book
 
-        try{
-            FileInputStream file = new FileInputStream(new File(filepath));
-            Workbook workbook = new XSSFWorkbook(file);
+        try (FileInputStream file = new FileInputStream(new File(filepath));
+            Workbook workbook = new XSSFWorkbook(file)) {
+
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
 
-            //read header
+            // Read header
+            if (!rowIterator.hasNext()) {
+                throw new IllegalArgumentException("The Excel file is empty or missing a header row.");
+            }
             Row headerRow = rowIterator.next();
             List<String> header = new ArrayList<>();
 
-            for (Cell cell : headerRow){
-                header.add(cell.getStringCellValue()); //register the headers， there  will be 4
+            for (Cell cell : headerRow) {
+                header.add(cell.getStringCellValue()); // Register the headers
             }
 
-            //for each row
-            while(rowIterator.hasNext()){
+            // For each row
+            while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                Cell nameCell = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                Cell spaceCell = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                Cell quantityCell = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                String name = nameCell.toString();
-                int space = (int)Double.parseDouble(spaceCell.toString());
-                int quantity = (int) Double.parseDouble(quantityCell.toString());
 
-                Cargo newCargo = new Cargo(name, space);
-                cargoMap.put(newCargo, quantity); //put the cargo into the map with its quantity
-                //quantity is added directly as we have conformation that the records are unique
+                try {
+                    Cell nameCell = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    Cell spaceCell = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    Cell quantityCell = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+
+                    String name = nameCell.toString();
+                    int space = (int) Double.parseDouble(spaceCell.toString());
+                    int quantity = (int) Double.parseDouble(quantityCell.toString());
+
+                    if (name.isEmpty() || space <= 0 || quantity < 0) {
+                        throw new IllegalArgumentException("Invalid data in row: " + row.getRowNum());
+                    }
+
+                    Cargo newCargo = new Cargo(name, space);
+                    cargoMap.put(newCargo, quantity); // Add the cargo to the map with its quantity
+                } catch (NumberFormatException e) {
+                    System.err.println("Error parsing numeric data in row " + row.getRowNum() + ": " + e.getMessage());
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid data in row " + row.getRowNum() + ": " + e.getMessage());
+                }
             }
-            workbook.close();
-            file.close();
-        }catch(IOException e){
-            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Error reading the Excel file: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error processing the Excel file: " + e.getMessage());
         }
+
         return cargoMap;
     }
 
@@ -88,7 +103,7 @@ public class ExcelReader {
                 row.createCell(3).setCellValue(airplane.getStorageSpace()); // same remaining space repeated
             }
 
-            if (startRow != rowNum-1){
+            if (startRow != rowNum - 1){
                 sheet.addMergedRegion(new CellRangeAddress(startRow, rowNum-1, 0, 0));
             }
             Row firstRow = sheet.getRow(startRow);
@@ -105,13 +120,13 @@ public class ExcelReader {
         try (FileOutputStream fileOut = new FileOutputStream(filepath)){
             workbook.write(fileOut);
             System.out.println("Report now available in current dir with name: " + filepath);
-        }catch(IOException E){
-            E.printStackTrace();
+        }catch(IOException e){
+            System.err.println("Error writing to the Excel file: " + e.getMessage());
         }finally{
             try {
                 workbook.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("Error closing the workbook: " + e.getMessage());
             }
         }
     }
