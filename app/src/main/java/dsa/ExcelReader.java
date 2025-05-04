@@ -17,83 +17,84 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelReader {
-    public static LinkedHashMap<Cargo, Integer> ReadFromExcel(String filepath){
+    public static LinkedHashMap<Cargo, Integer> ReadFromExcel(String filepath) {
         LinkedHashMap<Cargo, Integer> cargoMap = new LinkedHashMap<>();
-        //Map<Cargo, Integer> cargoMap = new HashMap<>(); //for the DS
-        //lets say we have 10 books, it would then look like this: (book, 10)
-        //the key is the book, and the value is the quantity of the book
+        // Map<Cargo, Integer> cargoMap = new HashMap<>(); //for the DS
+        // lets say we have 10 books, it would then look like this: (book, 10)
+        // the key is the book, and the value is the quantity of the book
 
-        try{
+        try {
             FileInputStream file = new FileInputStream(new File(filepath));
             Workbook workbook = new XSSFWorkbook(file);
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
 
-            //read header
+            // read header
             Row headerRow = rowIterator.next();
             List<String> header = new ArrayList<>();
 
-            for (Cell cell : headerRow){
-                header.add(cell.getStringCellValue()); //register the headers， there  will be 4
+            for (Cell cell : headerRow) {
+                header.add(cell.getStringCellValue()); // register the headers， there will be 4
             }
 
-            //for each row
-            while(rowIterator.hasNext()){
+            // for each row
+            while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
                 Cell nameCell = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                 Cell spaceCell = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                 Cell quantityCell = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                 String name = nameCell.toString();
-                int space = (int)Double.parseDouble(spaceCell.toString());
+                int space = (int) Double.parseDouble(spaceCell.toString());
                 int quantity = (int) Double.parseDouble(quantityCell.toString());
 
                 Cargo newCargo = new Cargo(name, space);
-                cargoMap.put(newCargo, quantity); //put the cargo into the map with its quantity
-                //quantity is added directly as we have conformation that the records are unique
+                cargoMap.put(newCargo, quantity); // put the cargo into the map with its quantity
+                // quantity is added directly as we have conformation that the records are
+                // unique
             }
             workbook.close();
             file.close();
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return cargoMap;
     }
 
-    public static void exportToExcel(String filepath, String sheetName, List <Airplane> completedAirplanes){
+    public static void exportToExcel(String filepath, String sheetName, List<Airplane> completedAirplanes) {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet(sheetName);
 
-        //header row
+        // header row
         Row headerRow = sheet.createRow(0);
-        String[] headerStrings = {"Airplane ID", "Cargo Name", "Cargo Space", "Remaining Space"};
-        for (int i = 0; i < headerStrings.length; i++){
+        String[] headerStrings = { "Airplane ID", "Cargo Name", "Cargo Space", "Remaining Space" };
+        for (int i = 0; i < headerStrings.length; i++) {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(headerStrings[i]);
         }
 
-        //start to fill in the rows here
+        // start to fill in the rows here
         int rowNum = 1;
-        
+
         int airplaneNum = 1;
 
-        for (Airplane airplane : completedAirplanes){
+        for (Airplane airplane : completedAirplanes) {
             int startRow = rowNum;
 
-            for (Cargo cargo : airplane.getCargoList()){
+            for (Cargo cargo : airplane.getCargoList()) {
                 Row row = sheet.createRow(rowNum);
                 rowNum++;
-                // 
+                //
                 row.createCell(1).setCellValue(cargo.getName());
-                row.createCell(2).setCellValue(cargo.getSpace());
+                row.createCell(2).setCellValue(cargo.getSize());
                 row.createCell(3).setCellValue(airplane.getStorageSpace()); // same remaining space repeated
             }
 
-            if (startRow != rowNum-1){
-                sheet.addMergedRegion(new CellRangeAddress(startRow, rowNum-1, 0, 0));
+            if (startRow != rowNum - 1) {
+                sheet.addMergedRegion(new CellRangeAddress(startRow, rowNum - 1, 0, 0));
             }
             Row firstRow = sheet.getRow(startRow);
             firstRow.createCell(0).setCellValue("Plane #" + airplaneNum);
-            airplaneNum ++;
+            airplaneNum++;
         }
 
         // Autosize columns
@@ -101,13 +102,13 @@ public class ExcelReader {
             sheet.autoSizeColumn(i);
         }
 
-        //write to file
-        try (FileOutputStream fileOut = new FileOutputStream(filepath)){
+        // write to file
+        try (FileOutputStream fileOut = new FileOutputStream(filepath)) {
             workbook.write(fileOut);
             System.out.println("Report now available in current dir with name: " + filepath);
-        }catch(IOException E){
+        } catch (IOException E) {
             E.printStackTrace();
-        }finally{
+        } finally {
             try {
                 workbook.close();
             } catch (IOException e) {
