@@ -2,17 +2,42 @@
 //Excelreader will only be accessed here for low coupling
 package dsa;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import dsa.interfaces.CargoDataHandler;
 
 public class ExcelCargoDataHandler implements CargoDataHandler {
+
+    @Override
     public Map<Cargo, Integer> read(String filepath) {
-        return ExcelReader.ReadFromExcel(filepath);
+        if (filepath == null || filepath.trim().isEmpty()) {
+            throw new IllegalArgumentException("Filepath cannot be null or empty.");
+        }
+
+        try {
+            return ExcelReader.ReadFromExcel(filepath);
+        } catch (Exception e) {
+            System.err.println("Error reading cargo data from Excel file: " + e.getMessage());
+            return new LinkedHashMap<>(); // Return an empty map if an error occurs
+        }
     }
 
+    @Override
     public void write(String inputFilePath, String outputFilePath, List<Airplane> airplanes) {
-        ExcelReader.exportToExcel(inputFilePath, outputFilePath, airplanes);
+        if (outputFilePath == null || outputFilePath.trim().isEmpty()) {
+            throw new IllegalArgumentException("Output filepath cannot be null or empty.");
+        }
+        if (airplanes == null || airplanes.isEmpty()) {
+            throw new IllegalArgumentException("Airplanes list cannot be null or empty.");
+        }
+
+        try {
+            ExcelReader.exportToExcel(inputFilePath, outputFilePath, airplanes);
+        } catch (Exception e) {
+            System.err.println("Error writing packing results to Excel file: " + e.getMessage());
+        }
     }
 }
 

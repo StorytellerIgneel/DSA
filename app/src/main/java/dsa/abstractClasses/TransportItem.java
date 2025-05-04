@@ -3,10 +3,17 @@ package dsa.abstractClasses;
 import dsa.interfaces.Loadable;
 
 public abstract class TransportItem implements Loadable{
-    private String name;
-    private int size;
+    private final String name;
+    private final int size;
 
     public TransportItem(String name, int size) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty.");
+        }
+        if (size <= 0) {
+            throw new IllegalArgumentException("Size must be greater than zero.");
+        }
+        
         this.name = name;
         this.size = size;
     }

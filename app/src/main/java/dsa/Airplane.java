@@ -6,7 +6,7 @@ import dsa.abstractClasses.Bin;
 import dsa.abstractClasses.TransportItem;
 
 public class Airplane extends Bin {
-    private String ID;
+    private final String ID;
 
     public Airplane() {
         super(10); // default storage space
@@ -15,6 +15,10 @@ public class Airplane extends Bin {
 
     public Airplane(String ID, int storageSpace) {
         super(storageSpace);
+        
+        if (ID == null || ID.trim().isEmpty()) {
+            throw new IllegalArgumentException("Airplane ID cannot be null or empty.");
+        }
         this.ID = ID;
     }
 

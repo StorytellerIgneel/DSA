@@ -1,6 +1,11 @@
 package dsa.abstractClasses;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import dsa.Airplane;
 import dsa.Cargo;
@@ -14,6 +19,9 @@ public abstract class BinPackingAlgorithm implements PackingStrategy{
     protected CargoDataHandler dataHandler;
 
     public BinPackingAlgorithm(CargoDataHandler dataHandler){
+        if (dataHandler == null) {
+            throw new IllegalArgumentException("Data handler cannot be null.");
+        }
         this.completedAirplanes = new ArrayList<>();
         this.dataHandler = dataHandler;
     }
@@ -25,33 +33,60 @@ public abstract class BinPackingAlgorithm implements PackingStrategy{
 
     @Override
     public Map<Cargo, Integer> importCargoData(String filepath){
-        return dataHandler.read(filepath);
+        if (filepath == null || filepath.trim().isEmpty()) {
+            throw new IllegalArgumentException("Filepath cannot be null or empty.");
+        }
+
+        try {
+            return dataHandler.read(filepath);
+        } catch (Exception e) {
+            System.err.println("Error importing cargo data from file: " + e.getMessage());
+            return new LinkedHashMap<>(); // Return an empty map if an error occurs
+        }
     }
 
     @Override
     public void exportPackingResult(String inputFilepath, String outputFilepath){
-        dataHandler.write(inputFilepath, outputFilepath, completedAirplanes);
+        if (outputFilepath == null || outputFilepath.trim().isEmpty()) {
+            throw new IllegalArgumentException("Output filepath cannot be null or empty.");
+        }
+
+        try {
+            dataHandler.write(inputFilepath, outputFilepath, completedAirplanes);
+        } catch (Exception e) {
+            System.err.println("Error exporting packing results to file: " + e.getMessage());
+        }
     }
 
     //can be used for multiple algorithms, so placed in abstract class
     protected List<CargoWrapper> expandCargoItems(Map<Cargo, Integer> cargoMap) {
+        if (cargoMap == null) {
+            throw new IllegalArgumentException("Cargo map cannot be null.");
+        }
+
         List<CargoWrapper> expandedCargoItems = new ArrayList<>();
         for (Map.Entry<Cargo, Integer> entry : cargoMap.entrySet()) {
-            if (entry.getKey() == null || entry.getValue() == null) {
-                System.err.println("Skipping invalid cargo entry: null value found.");
-                continue;
+            try {
+                if (entry.getKey() == null || entry.getValue() == null) {
+                    throw new IllegalArgumentException("Invalid cargo entry: null value found.");
+                }
+                if (entry.getValue() <= 0) {
+                    throw new IllegalArgumentException("Invalid cargo quantity for " + entry.getKey().getName() + ": must be greater than zero.");
+                }
+                expandedCargoItems.add(new CargoWrapper(entry.getKey(), entry.getValue()));
+            } catch (IllegalArgumentException e) {
+                System.err.println("Skipping invalid cargo entry: " + e.getMessage());
             }
-            if (entry.getValue() <= 0) {
-                System.err.println("Skipping cargo with non-positive quantity: " + entry.getKey().getName());
-                continue;
-            }
-            expandedCargoItems.add(new CargoWrapper(entry.getKey(), entry.getValue()));
         }
         return expandedCargoItems;
     }
 
     //general transforming function that can be used for multiple algos too
     public static TreeMap<Integer, List<CargoWrapper>> transformToTreeMap(Map<Cargo, Integer> cargoMap) {
+        if (cargoMap == null) {
+            throw new IllegalArgumentException("Cargo map cannot be null.");
+        }
+        
         TreeMap<Integer, List<CargoWrapper>> cargoTreeMap = new TreeMap<>(Comparator.reverseOrder()); // create a tree
                                                                                                       // map with
                                                                                                       // reverse order

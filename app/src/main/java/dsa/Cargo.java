@@ -8,6 +8,9 @@ public class Cargo extends TransportItem implements Comparable<Cargo> {
     }
     @Override
     public int compareTo(Cargo other) {
+        if (other == null) {
+            throw new IllegalArgumentException("Cannot compare with null Cargo.");
+        }
         return Integer.compare(this.getSize(), other.getSize());
     }
 

@@ -21,49 +21,71 @@ import dsa.abstractClasses.TransportItem;
 public class ExcelReader {
     public static LinkedHashMap<Cargo, Integer> ReadFromExcel(String filepath) {
         LinkedHashMap<Cargo, Integer> cargoMap = new LinkedHashMap<>();
-        // Map<Cargo, Integer> cargoMap = new HashMap<>(); //for the DS
-        // lets say we have 10 books, it would then look like this: (book, 10)
-        // the key is the book, and the value is the quantity of the book
+        
+        if (filepath == null || filepath.trim().isEmpty()) {
+            throw new IllegalArgumentException("Filepath cannot be null or empty.");
+        }
 
-        try {
-            FileInputStream file = new FileInputStream(new File(filepath));
-            Workbook workbook = new XSSFWorkbook(file);
+        try (FileInputStream file = new FileInputStream(new File(filepath));
+            Workbook workbook = new XSSFWorkbook(file)) {
+
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
 
-            // read header
+            // Read header
+            if (!rowIterator.hasNext()) {
+                throw new IllegalArgumentException("The Excel file is empty or missing a header row.");
+            }
             Row headerRow = rowIterator.next();
             List<String> header = new ArrayList<>();
 
             for (Cell cell : headerRow) {
-                header.add(cell.getStringCellValue()); // register the headers， there will be 4
+                header.add(cell.getStringCellValue());
             }
 
-            // for each row
+            // For each row
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                Cell nameCell = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                Cell spaceCell = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                Cell quantityCell = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                String name = nameCell.toString();
-                int space = (int) Double.parseDouble(spaceCell.toString());
-                int quantity = (int) Double.parseDouble(quantityCell.toString());
 
-                Cargo newCargo = new Cargo(name, space);
-                cargoMap.put(newCargo, quantity); // put the cargo into the map with its quantity
-                // quantity is added directly as we have conformation that the records are
-                // unique
+                try {
+                    Cell nameCell = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    Cell spaceCell = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    Cell quantityCell = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+
+                    String name = nameCell.toString();
+                    int space = (int) Double.parseDouble(spaceCell.toString());
+                    int quantity = (int) Double.parseDouble(quantityCell.toString());
+
+                    if (name.isEmpty() || space <= 0 || quantity < 0) {
+                        throw new IllegalArgumentException("Invalid data in row: " + row.getRowNum());
+                    }
+
+                    Cargo newCargo = new Cargo(name, space);
+                    cargoMap.put(newCargo, quantity);
+                } catch (NumberFormatException e) {
+                    System.err.println("Error parsing numeric data in row " + row.getRowNum() + ": " + e.getMessage());
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid data in row " + row.getRowNum() + ": " + e.getMessage());
+                }
             }
-            workbook.close();
-            file.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error reading the Excel file: " + e.getMessage());
         }
 
         return cargoMap;
     }
 
     public static void exportToExcel(String filepath, String sheetName, List<Airplane> completedAirplanes) {
+        if (filepath == null || filepath.trim().isEmpty()) {
+            throw new IllegalArgumentException("Filepath cannot be null or empty.");
+        }
+        if (sheetName == null || sheetName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Sheet name cannot be null or empty.");
+        }
+        if (completedAirplanes == null || completedAirplanes.isEmpty()) {
+            throw new IllegalArgumentException("Completed airplanes list cannot be null or empty.");
+        }
+
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet(sheetName);
 
@@ -109,8 +131,8 @@ public class ExcelReader {
         try (FileOutputStream fileOut = new FileOutputStream(filepath)) {
             workbook.write(fileOut);
             System.out.println("Report now available in current dir with name: " + filepath);
-        } catch (IOException E) {
-            E.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Error writing to the Excel file: " + e.getMessage());
         } finally {
             try {
                 workbook.close();
