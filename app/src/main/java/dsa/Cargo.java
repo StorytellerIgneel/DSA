@@ -3,16 +3,12 @@ package dsa;
 import dsa.abstractClasses.TransportItem;
 
 public class Cargo extends TransportItem implements Comparable<Cargo> {
-    private String name;
-    private int size;
-
     public Cargo(String name, int capacity) {
         super(name, capacity);
     }
-
     @Override
     public int compareTo(Cargo other) {
-        return Integer.compare(this.size, other.size);
+        return Integer.compare(this.getSize(), other.getSize());
     }
 
     @Override
@@ -23,13 +19,13 @@ public class Cargo extends TransportItem implements Comparable<Cargo> {
             return false; // check if the object is null or not the same class
 
         Cargo cargo = (Cargo) obj;
-        return size == cargo.size && name.equals(cargo.name); // check if the space and name are the same
+        return getSize() == cargo.getSize() && getName().equals(cargo.getName()); // check if the space and name are the same
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode(); // get the hashcode of the name
-        result = 31 * result + size; // multiply by 31 and add the space
+        int result = getName().hashCode(); // get the hashcode of the name
+        result = 31 * result + getSize(); // multiply by 31 and add the space
         return result; // return the hashcode
     }
 }
