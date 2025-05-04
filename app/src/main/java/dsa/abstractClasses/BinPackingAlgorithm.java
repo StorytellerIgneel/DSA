@@ -1,6 +1,12 @@
-package dsa;
+package dsa.abstractClasses;
 
 import java.util.*;
+
+import dsa.Airplane;
+import dsa.Cargo;
+import dsa.CargoWrapper;
+import dsa.interfaces.CargoDataHandler;
+import dsa.interfaces.PackingStrategy;
 
 public abstract class BinPackingAlgorithm implements PackingStrategy{
     protected List<Airplane> completedAirplanes;

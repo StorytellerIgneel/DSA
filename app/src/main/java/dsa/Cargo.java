@@ -1,20 +1,13 @@
 package dsa;
 
-public class Cargo implements Comparable<Cargo> {
+import dsa.abstractClasses.TransportItem;
+
+public class Cargo extends TransportItem implements Comparable<Cargo> {
     private String name;
     private int size;
 
     public Cargo(String name, int capacity) {
-        this.name = name;
-        this.size = capacity;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getSize() {
-        return size;
+        super(name, capacity);
     }
 
     @Override
@@ -38,10 +31,5 @@ public class Cargo implements Comparable<Cargo> {
         int result = name.hashCode(); // get the hashcode of the name
         result = 31 * result + size; // multiply by 31 and add the space
         return result; // return the hashcode
-    }
-
-    @Override
-    public String toString() {
-        return "Cargo{" + "name='" + name + '\'' + ", space=" + size + '}';
     }
 }

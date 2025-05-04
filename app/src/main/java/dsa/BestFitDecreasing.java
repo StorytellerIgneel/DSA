@@ -2,6 +2,8 @@ package dsa;
 
 import java.util.*;
 
+import dsa.abstractClasses.BinPackingAlgorithm;
+
 public class BestFitDecreasing extends BinPackingAlgorithm {
     private TreeMap<Integer, List<CargoWrapper>> cargoTreeMap;
 
@@ -46,7 +48,7 @@ public class BestFitDecreasing extends BinPackingAlgorithm {
 
         Cargo currentCargo = initialCargo;
         while (currentCargo != null && remainingSpace >= currentCargo.getSize()) {
-            airplane.addCargo(currentCargo);
+            airplane.addItem(currentCargo);
             remainingSpace -= currentCargo.getSize();
             removeCargoFromMap(currentCargo);
             Integer fitKey = cargoTreeMap.ceilingKey(remainingSpace);

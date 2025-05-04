@@ -2,6 +2,8 @@ package dsa;
 
 import java.util.*;
 
+import dsa.abstractClasses.BinPackingAlgorithm;
+
 public class FirstFit extends BinPackingAlgorithm {
 
     private LinkedHashMap<Cargo, Integer> cargoMap; // Map of cargo items and their quantities; maintains insertion
@@ -39,7 +41,7 @@ public class FirstFit extends BinPackingAlgorithm {
                 for (Airplane plane : completedAirplanes) {
                     if (plane.getStorageSpace() >= wrapper.getCargo().getSize()) {
                         try {
-                            plane.addCargo(new Cargo(wrapper.getCargo().getName(), wrapper.getCargo().getSize()));
+                            plane.addItem(new Cargo(wrapper.getCargo().getName(), wrapper.getCargo().getSize()));
                             wrapper.decrement();
                             placed = true;
                             break;
@@ -52,7 +54,7 @@ public class FirstFit extends BinPackingAlgorithm {
                 if (!placed) {
                     try {
                         Airplane newPlane = new Airplane();
-                        newPlane.addCargo(new Cargo(wrapper.getCargo().getName(), wrapper.getCargo().getSize()));
+                        newPlane.addItem(new Cargo(wrapper.getCargo().getName(), wrapper.getCargo().getSize()));
                         wrapper.decrement();
                         completedAirplanes.add(newPlane);
                     } catch (Exception e) {

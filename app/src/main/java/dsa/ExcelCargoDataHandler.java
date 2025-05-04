@@ -4,6 +4,8 @@ package dsa;
 
 import java.util.*;
 
+import dsa.interfaces.CargoDataHandler;
+
 public class ExcelCargoDataHandler implements CargoDataHandler {
     public Map<Cargo, Integer> read(String filepath) {
         return ExcelReader.ReadFromExcel(filepath);

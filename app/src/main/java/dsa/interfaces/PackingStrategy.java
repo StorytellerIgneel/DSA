@@ -1,6 +1,9 @@
-package dsa;
+package dsa.interfaces;
 
 import java.util.*;
+
+import dsa.Airplane;
+import dsa.Cargo;
 
 public interface PackingStrategy {
     public void pack();

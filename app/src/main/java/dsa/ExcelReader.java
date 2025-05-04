@@ -16,6 +16,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import dsa.abstractClasses.TransportItem;
+
 public class ExcelReader {
     public static LinkedHashMap<Cargo, Integer> ReadFromExcel(String filepath) {
         LinkedHashMap<Cargo, Integer> cargoMap = new LinkedHashMap<>();
@@ -80,7 +82,7 @@ public class ExcelReader {
         for (Airplane airplane : completedAirplanes) {
             int startRow = rowNum;
 
-            for (Cargo cargo : airplane.getCargoList()) {
+            for (TransportItem cargo : airplane.getCargoList()) {
                 Row row = sheet.createRow(rowNum);
                 rowNum++;
                 //
