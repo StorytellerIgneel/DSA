@@ -9,7 +9,12 @@ public class Airplane extends Bin {
     private final String ID;
 
     public Airplane() {
-        super(15); // default storage space
+        super(10); // default storage space
+        this.ID = UUID.randomUUID().toString();
+    }
+
+    public Airplane(int storageSpace) {
+        super(storageSpace); // default storage space
         this.ID = UUID.randomUUID().toString();
     }
 

@@ -43,15 +43,16 @@ public class BestFitDecreasing extends BinPackingAlgorithm {
     // runs similar to recursive, add cargo -> search for cargo with less remaining
     // space -> until no more cargo that fits
     public void packToAirplane(Cargo initialCargo) {
-        int remainingSpace = 10;
         Airplane airplane = new Airplane();
 
         Cargo currentCargo = initialCargo;
-        while (currentCargo != null && remainingSpace >= currentCargo.getSize()) {
+        while (currentCargo != null && (airplane.getStorageSpace() >= currentCargo.getSize())) {
             airplane.addItem(currentCargo);
-            remainingSpace -= currentCargo.getSize();
+            // System.out.println("Current storage: " + airplane.getStorageSpace());
+            // System.out.println("Current cargo: " + currentCargo.getSize());
+            // airplane.setStorageSpace(airplane.getStorageSpace() - currentCargo.getSize());
             removeCargoFromMap(currentCargo);
-            Integer fitKey = cargoTreeMap.ceilingKey(remainingSpace);
+            Integer fitKey = cargoTreeMap.ceilingKey(airplane.getStorageSpace());
 
             currentCargo = getNextAvailableCargo(fitKey);
         }

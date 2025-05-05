@@ -15,6 +15,13 @@ public abstract class Bin {
         this.cargoList = new ArrayList<>();
     }
 
+    public void setStorageSpace(int storageSpace) {
+        if (storageSpace < 0) {
+            throw new IllegalArgumentException("Storage space must be greater than zero.");
+        }
+        this.storageSpace = storageSpace;
+    }
+
     public int getStorageSpace() {
         return storageSpace;
     }
