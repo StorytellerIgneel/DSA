@@ -1,3 +1,4 @@
+//object in the scenario
 package dsa;
 
 import dsa.abstractClasses.TransportItem;

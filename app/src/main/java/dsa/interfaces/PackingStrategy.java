@@ -1,3 +1,5 @@
+//interface for all algorithm to implement
+
 package dsa.interfaces;
 
 import java.util.*;

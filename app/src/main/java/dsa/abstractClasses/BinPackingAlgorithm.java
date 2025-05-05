@@ -1,3 +1,5 @@
+//abstract class for all Algorithms
+
 package dsa.abstractClasses;
 
 import java.util.ArrayList;

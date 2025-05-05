@@ -1,3 +1,4 @@
+//BFD algorithm main
 package dsa;
 
 import java.util.*;
@@ -48,9 +49,6 @@ public class BestFitDecreasing extends BinPackingAlgorithm {
         Cargo currentCargo = initialCargo;
         while (currentCargo != null && (airplane.getStorageSpace() >= currentCargo.getSize())) {
             airplane.addItem(currentCargo);
-            // System.out.println("Current storage: " + airplane.getStorageSpace());
-            // System.out.println("Current cargo: " + currentCargo.getSize());
-            // airplane.setStorageSpace(airplane.getStorageSpace() - currentCargo.getSize());
             removeCargoFromMap(currentCargo);
             Integer fitKey = cargoTreeMap.ceilingKey(airplane.getStorageSpace());
 

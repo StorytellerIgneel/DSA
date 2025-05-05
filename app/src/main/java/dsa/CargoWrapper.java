@@ -1,3 +1,4 @@
+//a special wrapper class that includes both the cargo and the quantity of the same type of cargo
 package dsa;
 
 public class CargoWrapper {

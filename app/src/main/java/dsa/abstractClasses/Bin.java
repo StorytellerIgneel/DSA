@@ -1,3 +1,5 @@
+//abstract class for bins
+
 package dsa.abstractClasses;
 
 import java.util.ArrayList;

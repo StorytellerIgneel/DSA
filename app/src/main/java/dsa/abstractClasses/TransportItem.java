@@ -1,3 +1,4 @@
+//Abstract class for all cargos (if there are any other cargo types)
 package dsa.abstractClasses;
 
 import dsa.interfaces.Loadable;

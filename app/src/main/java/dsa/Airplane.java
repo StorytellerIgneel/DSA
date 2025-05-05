@@ -1,3 +1,4 @@
+//the bin for the assignment, extends the bin abstract class
 package dsa;
 
 import java.util.UUID;
