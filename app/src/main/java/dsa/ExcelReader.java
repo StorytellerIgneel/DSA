@@ -19,7 +19,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import dsa.abstractClasses.TransportItem;
 
 public class ExcelReader {
-    public static LinkedHashMap<Cargo, Integer> ReadFromExcel(String filepath) {
+    public static LinkedHashMap<Cargo, Integer> readFromExcel(String filepath) {
         LinkedHashMap<Cargo, Integer> cargoMap = new LinkedHashMap<>();
         
         if (filepath == null || filepath.trim().isEmpty()) {

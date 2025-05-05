@@ -17,7 +17,7 @@ public class ExcelCargoDataHandler implements CargoDataHandler {
         }
 
         try {
-            return ExcelReader.ReadFromExcel(filepath);
+            return ExcelReader.readFromExcel(filepath);
         } catch (Exception e) {
             System.err.println("Error reading cargo data from Excel file: " + e.getMessage());
             return new LinkedHashMap<>(); // Return an empty map if an error occurs
