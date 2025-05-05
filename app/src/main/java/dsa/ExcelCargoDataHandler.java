@@ -25,8 +25,8 @@ public class ExcelCargoDataHandler implements CargoDataHandler {
     }
 
     @Override
-    public void write(String inputFilePath, String outputFilePath, List<Airplane> airplanes) {
-        if (outputFilePath == null || outputFilePath.trim().isEmpty()) {
+    public void write(String filepath, String sheetname, List<Airplane> airplanes) {
+        if (sheetname == null || sheetname.trim().isEmpty()) {
             throw new IllegalArgumentException("Output filepath cannot be null or empty.");
         }
         if (airplanes == null || airplanes.isEmpty()) {
@@ -34,7 +34,7 @@ public class ExcelCargoDataHandler implements CargoDataHandler {
         }
 
         try {
-            ExcelReader.exportToExcel(inputFilePath, outputFilePath, airplanes);
+            ExcelReader.exportToExcel(filepath, sheetname, airplanes);
         } catch (Exception e) {
             System.err.println("Error writing packing results to Excel file: " + e.getMessage());
         }

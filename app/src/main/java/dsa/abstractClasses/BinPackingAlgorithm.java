@@ -46,13 +46,13 @@ public abstract class BinPackingAlgorithm implements PackingStrategy{
     }
 
     @Override
-    public void exportPackingResult(String inputFilepath, String outputFilepath){
-        if (outputFilepath == null || outputFilepath.trim().isEmpty()) {
-            throw new IllegalArgumentException("Output filepath cannot be null or empty.");
+    public void exportPackingResult(String filepath, String sheetname){
+        if (sheetname == null || sheetname.trim().isEmpty()) {
+            throw new IllegalArgumentException("Sheetname cannot be null or empty.");
         }
 
         try {
-            dataHandler.write(inputFilepath, outputFilepath, completedAirplanes);
+            dataHandler.write(filepath, sheetname, completedAirplanes);
         } catch (Exception e) {
             System.err.println("Error exporting packing results to file: " + e.getMessage());
         }

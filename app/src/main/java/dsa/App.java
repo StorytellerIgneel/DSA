@@ -8,14 +8,14 @@ public class App {
     public static void main(String[] args) {
         ExcelCargoDataHandler handler = new ExcelCargoDataHandler();
 
-        BestFitDecreasing bfd = new BestFitDecreasing(handler, "src\\main\\java\\dsa\\airplane_cargo.xlsx");
+        BestFitDecreasing bfd = new BestFitDecreasing(handler, "app\\src\\main\\java\\dsa\\airplane_cargo.xlsx");
         bfd.pack();
-        bfd.exportPackingResult("BFD_report.xlsx", "BFD_report");
+        bfd.exportPackingResult("BFD_report.xlsx", "Test Case A BC10");
 
         // FF
-        FirstFit ff = new FirstFit(handler, "src\\main\\java\\dsa\\airplane_cargo.xlsx");
+        FirstFit ff = new FirstFit(handler, "app\\src\\main\\java\\dsa\\airplane_cargo.xlsx");
         ff.pack();
-        ff.exportPackingResult("FirstFit_report.xlsx", "FirstFit_report");
+        ff.exportPackingResult("FirstFit_report.xlsx", "Test Case A BC10");
     }
 
 }
